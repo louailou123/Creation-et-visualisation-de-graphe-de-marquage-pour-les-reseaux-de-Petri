@@ -17,12 +17,12 @@ Ce projet permet de :
 ---
 
 ## Structure du projet
-├── README.md
-├── src/
-│ └── ... (code source Java)
-├── graphe.dot
-├── graphe.png
-└── .vscode/
+- ├── README.md
+- ├── src/
+- │ └── ... (code source Java)
+- ├── graphe.dot
+- ├── graphe.png
+- └── .vscode/
 
 ---
 
