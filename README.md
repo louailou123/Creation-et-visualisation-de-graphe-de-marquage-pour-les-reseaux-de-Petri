@@ -18,7 +18,7 @@ Ce projet permet de :
 
 ## Structure du projet
 - ├── README.md
-- ├── src/
+- ├── TVF/
 - │ └── ... (code source Java)
 - ├── graphe.dot
 - ├── graphe.png
