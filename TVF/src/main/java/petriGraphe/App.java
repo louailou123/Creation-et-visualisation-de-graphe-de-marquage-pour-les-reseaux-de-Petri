@@ -1,27 +1,136 @@
 package petriGraphe;
 
+import java.util.Scanner;
+import java.util.Vector;
+
+import petriGraphe.Graphes.GrapheStochastique;
+import petriGraphe.Marquages.GrapheMarquageStochastique;
+import petriGraphe.Marquages.Marquage;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        int[][] Pre = {
-            {1, 3},
-            {0, 0},
-            {1, 1}
-        };
+        Scanner scanner = new Scanner(System.in);
 
-        
-        int[][] Post = {
-            {0, 0},
-            {2, 1},
-            {1, 1}
-        };
-        int []M0={4, 2, 1};
-        Graphe g0=new Graphe(Pre, Post, M0);
-        GrapheMarquage gm0=new GrapheMarquage(g0);
-        gm0.construireGraphe();
-        gm0.afficherlaliste();
-        gm0.affichergraphe();
-        gm0.exporterGrapheHierarchique("graphe.dot");
+        System.out.print("Nombre de places (lignes) du réseau : ");
+        int lines;
+        while (true) {
+            try {
+                lines = Integer.parseInt(scanner.nextLine().trim());
+                if (lines > 0) break;
+                System.out.print("Veuillez saisir un entier strictement positif : ");
+            } catch (NumberFormatException e) {
+                System.out.print("Entrée invalide: saisissez un entier positif : ");
+            }
+        }
+
+        System.out.print("Nombre de transitions (colonnes) du réseau : ");
+        int cols;
+        while (true) {
+            try {
+                cols = Integer.parseInt(scanner.nextLine().trim());
+                if (cols > 0) break;
+                System.out.print("Veuillez saisir un entier strictement positif : ");
+            } catch (NumberFormatException e) {
+                System.out.print("Entrée invalide. Saisissez un entier positif : ");
+            }
+        }
+
+        int[][] Pre = new int[lines][cols];
+        int[][] Post = new int[lines][cols];
+
+        System.out.println("Saisir la matrice Pre (" + lines + " lignes, " + cols + " colonnes) :");
+        for (int i = 0; i < lines; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print("Pre[" + i + "][" + j + "] = ");
+                while (true) {
+                    try {
+                        int value = Integer.parseInt(scanner.nextLine().trim());
+                        if (value >= 0) {
+                            Pre[i][j] = value;
+                            break;
+                        }
+                        System.out.print("Veuillez saisir un entier >= 0 : ");
+                    } catch (NumberFormatException e) {
+                        System.out.print("Entrée invalide. Saisissez un entier valide : ");
+                    }
+                }
+            }
+        }
+
+        System.out.println("Saisir la matrice Post (" + lines + " lignes, " + cols + " colonnes) :");
+        for (int i = 0; i < lines; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print("Post[" + i + "][" + j + "] = ");
+                while (true) {
+                    try {
+                        int value = Integer.parseInt(scanner.nextLine().trim());
+                        if (value >= 0) {
+                            Post[i][j] = value;
+                            break;
+                        }
+                        System.out.print("Veuillez saisir un entier >= 0 : ");
+                    } catch (NumberFormatException e) {
+                        System.out.print("Entrée invalide. Saisissez un entier valide : ");
+                    }
+                }
+            }
+        }
+
+        System.out.println("Entrez le marquage initial M0 (" + lines + " valeurs) :");
+        int[] M0 = new int[lines];
+        for (int i = 0; i < lines; i++) {
+            System.out.print("M0[" + i + "] = ");
+            while (true) {
+                try {
+                    int value = Integer.parseInt(scanner.nextLine().trim());
+                    if (value >= 0) {
+                        M0[i] = value;
+                        break;
+                    }
+                    System.out.print("Veuillez saisir un entier >= 0 : ");
+                } catch (NumberFormatException e) {
+                    System.out.print("Entrée invalide. Saisissez un entier valide : ");
+                }
+            }
+        }
+        System.out.print("Nombre des poids du réseau : ");
+        int poidsCount;
+        while (true) {
+            try {
+                poidsCount = Integer.parseInt(scanner.nextLine().trim());
+                if (poidsCount > 0) break;
+                System.out.print("Veuillez saisir un entier strictement positif : ");
+            } catch (NumberFormatException e) {
+                System.out.print("Entrée invalide: ");
+            }
+        }
+        System.out.println("Entrez le vecteur des poids(" + poidsCount + " valeurs) :");
+        Vector<Float> poids = new Vector<>(poidsCount);
+        while (true) {
+            try {
+
+                for (int i = 0; i < poidsCount; i++) {
+                    System.out.print("poids[" + i + "] = ");
+                    float value = Float.parseFloat(scanner.nextLine().trim());
+                    if (value >= 0) {
+                        poids.add(value);
+                    } else {
+                        System.out.print("Veuillez saisir un nombre >= 0 : ");
+                        i--; 
+                    }
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.print("Entrée invalide. Saisissez un nombre reel valide : ");
+            }
+            
+        }
+        Marquage M0Obj = new Marquage(M0);
+
+        GrapheStochastique gs = new GrapheStochastique(Pre, Post, M0Obj,poids);
+        GrapheMarquageStochastique gms = new GrapheMarquageStochastique(gs);
+        gms.construireGraphe();
+        gms.afficherlaliste();
+        gms.affichergraphe();
     }
 }
