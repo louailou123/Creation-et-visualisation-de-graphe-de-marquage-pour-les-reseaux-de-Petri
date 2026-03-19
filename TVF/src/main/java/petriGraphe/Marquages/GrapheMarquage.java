@@ -94,7 +94,7 @@ public class GrapheMarquage extends AbstractGrapheMarquage {
         }
         else
         {
-            System.out.println("le graphe n'est pas borné alors le graphe n'est pas reinitialisable");
+                 return;
         }
     }
     public boolean testerReinitialisable()
@@ -102,6 +102,7 @@ public class GrapheMarquage extends AbstractGrapheMarquage {
         creationListMarquageSuivants();
         if (this.borne == false)
         {
+            System.out.println("le graphe n'est pas borné alors le graphe n'est pas reinitialisable");
             return false;
         }
         for (Marquage m : listEtatsAccessible)
