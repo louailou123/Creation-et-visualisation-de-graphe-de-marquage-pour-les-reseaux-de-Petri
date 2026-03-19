@@ -1,4 +1,12 @@
-C:\Users\Administrateur\Desktop\petri\TVF\src\main\java\petriGraphe\Affichage.java
-C:\Users\Administrateur\Desktop\petri\TVF\src\main\java\petriGraphe\App.java
-C:\Users\Administrateur\Desktop\petri\TVF\src\main\java\petriGraphe\Graphe.java
-C:\Users\Administrateur\Desktop\petri\TVF\src\main\java\petriGraphe\GrapheMarquage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\AbstractClasses\AbstractAffichage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\AbstractClasses\AbstractGraphe.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\AbstractClasses\AbstractGrapheMarquage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Affichage\Affichage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Affichage\AffichageStochastique.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\App.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Graphes\Graphe.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Graphes\GrapheStochastique.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Marquages\GrapheMarquage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Marquages\GrapheMarquageStochastique.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\Marquages\Marquage.java
+C:\Users\Mba info\Desktop\Projects\Creation-et-visualisation-de-graphe-de-marquage-pour-les-reseaux-de-Petri\TVF\src\main\java\petriGraphe\ProprietiesTestes\ProprietiesTester.java

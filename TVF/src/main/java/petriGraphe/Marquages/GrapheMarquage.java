@@ -3,14 +3,11 @@ import java.util.*;
 
 import petriGraphe.Affichage.Affichage;
 import petriGraphe.Graphes.Graphe;
-import petriGraphe.AbstractClasses.AbstractAffichage;
-import petriGraphe.AbstractClasses.AbstractGraphe;
 import petriGraphe.AbstractClasses.AbstractGrapheMarquage;
 
 public class GrapheMarquage extends AbstractGrapheMarquage {
-     private AbstractGraphe graphe;
+     private Graphe graphe;
      private Set<Affichage> Resultat=new LinkedHashSet<>();
-     
      public GrapheMarquage(Graphe graphe) {
         this.graphe=graphe;
         this.listNoEncoursTrite.push(graphe.getM0());
@@ -21,13 +18,13 @@ public class GrapheMarquage extends AbstractGrapheMarquage {
 
     public Boolean estTirable(Marquage marquage, int [][] Pre , int t)
     {
-        int lignes = marquage.getM().length;       
+        int lignes = marquage.getM().length;
         int [] M = marquage.getM();   // number of places
 
         for (int i = 0; i < lignes; i++) {
-          if(M[i]<Pre[i][t])       
+          if(M[i]<Pre[i][t])
              return false;
-        
+
     }
     return true;
 }
@@ -48,44 +45,133 @@ public class GrapheMarquage extends AbstractGrapheMarquage {
             }
         return false;
     }
-    
+    public void testerBornitude()
+    {   if(!this.graphe.isEstConstruit())
+            construireGraphe();
+        if(this.borne)
+        {
+            System.out.println("le graphe est borné");
+        }
+        else
+        {
+            System.out.println("le graphe n'est pas borné");
+        }
+
+    }
+    public void creationListMarquageSuivants()
+    {
+        if(!this.graphe.isEstConstruit())
+        {
+            construireGraphe();
+        }
+        if (this.borne == true)
+        {
+            int[][] pre=this.graphe.getPre();
+            int[][] post=this.graphe.getPost();
+            for (Marquage mar: listEtatsAccessible)
+            {
+                this.listNoEncoursTrite.push(mar);
+                while (!listNoEncoursTrite.isEmpty()) {
+                    Marquage M =listNoEncoursTrite.pop();
+                    int [] encoursMarquageValeur=M.getM();
+                    for(int t=1;t<=pre[0].length;t++){
+                        if(estTirable(M, pre, t-1)){
+
+                            int[] nouveauMarquageValeur = new int[M.getM().length];
+                            nouveauMarquageValeur=calculerNouveauMarquageValeur(M, pre, post, t-1);
+                            Marquage nouveauMarquage=new Marquage(nouveauMarquageValeur);
+                            if(!containsArray(mar.getMarquagesSuivants(),nouveauMarquage))
+                            {
+                                mar.addMarquageSuivant(nouveauMarquage);
+                                this.listNoEncoursTrite.push(nouveauMarquage);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            System.out.println("le graphe n'est pas borné alors le graphe n'est pas reinitialisable");
+        }
+    }
+    public boolean testerReinitialisable()
+    {
+        creationListMarquageSuivants();
+        if (this.borne == false)
+        {
+            return false;
+        }
+        for (Marquage m : listEtatsAccessible)
+        {
+            System.out.print(Arrays.toString(m.getM())+"------->");
+            m.afficherListMarquagesSuivants(this.graphe.getM0());
+            System.out.println("");
+            if(!m.existDansMarquageSuivant(graphe.getM0()))
+            {
+                System.out.println("M0 n'existe pas dans cette sequence alors le graphe n'est pas reinitialisable");
+                return false;
+            }
+
+        }
+
+
+        System.out.println("M0 existe dans toutes les sequences alors le graphe est reinitialisable");
+        return true;
+
+
+    }
+
 
 
     public void construireGraphe()
-    { 
-        int[][] pre=this.graphe.getPre();
-        int[][] post=this.graphe.getPost();
-        while (!listNoEncoursTrite.isEmpty()) {
-             Marquage M =listNoEncoursTrite.pop();
-             int [] encoursMarquageValeur=M.getM();
+    {
+        if(!this.graphe.isEstConstruit())
+        {
+            int[][] pre=this.graphe.getPre();
+            int[][] post=this.graphe.getPost();
+            while (!listNoEncoursTrite.isEmpty()) {
+                Marquage M =listNoEncoursTrite.pop();
+                int [] encoursMarquageValeur=M.getM();
 
-             for(int t=1;t<=pre[0].length;t++){
-                if(estTirable(M, pre, t-1)){
+                for(int t=1;t<=pre[0].length;t++){
+                    if(estTirable(M, pre, t-1)){
 
-                    int[] nouveauMarquageValeur = new int[M.getM().length];
-                    nouveauMarquageValeur=calculerNouveauMarquageValeur(M, pre, post, t-1);
-                    Marquage nouveauMarquage=new Marquage(nouveauMarquageValeur);
-                    nouveauMarquage.addMarquagePrecedent(M);
-                    for(Marquage m :M.getMarquagesPrecedents())
-                    {
-                        nouveauMarquage.addMarquagePrecedent(m);
+                        int[] nouveauMarquageValeur = new int[M.getM().length];
+                        nouveauMarquageValeur=calculerNouveauMarquageValeur(M, pre, post, t-1);
+                        Marquage nouveauMarquage=new Marquage(nouveauMarquageValeur);
+                        if(!containsArray(listEtatsAccessible,nouveauMarquage))
+                        {
+                            nouveauMarquage.addMarquagePrecedent(M);
+                            this.listEtatsAccessible.add(nouveauMarquage);
+                            this.listNoEncoursTrite.push(nouveauMarquage);
+                            for(Marquage m :M.getMarquagesPrecedents())
+                            {
+                                nouveauMarquage.addMarquagePrecedent(m);
+                            }
+                            if(nouveauMarquage.superieurOuEgalAuxPrecedents())
+                            {
+                                this.borne=false;
+                                return;
+                            }
+                        }
+
+                        this.Resultat.add(new Affichage(encoursMarquageValeur, t, nouveauMarquageValeur));
+
                     }
-                    if(nouveauMarquage.superieurOuEgalAuxPrecedents())
-                    {
-                            System.out.println("le graphe n'est pas borne");
-                        return;
-                    }
-                    this.Resultat.add(new Affichage(encoursMarquageValeur, t, nouveauMarquageValeur));
-                    if(containsArray(listEtatsAccessible,nouveauMarquage)==false)
-                    {
-                        this.listEtatsAccessible.add(nouveauMarquage);
-                        this.listNoEncoursTrite.push(nouveauMarquage);
-                    }
+
                 }
 
-             }
-            
+            }
+            this.borne=true;
         }
+        else
+        {
+            System.out.println("le graphe est déja construit");
+        }
+
     }
 
 

@@ -45,8 +45,82 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
             }
         return false;
     }
-    
 
+
+    public void testerBornitude()
+    {   if(!this.graphe.isEstConstruit())
+           construireGraphe();
+        if(this.borne==true)
+        {
+            System.out.println("le graphe est borné");
+        }
+        else
+        {
+            System.out.println("le graphe n'est pas borné");
+        }
+
+    }
+    public void creationListMarquageSuivants()
+    {
+        if(!this.graphe.isEstConstruit())
+        {
+            construireGraphe();
+        }
+        if (this.borne == true)
+        {
+            int[][] pre=this.graphe.getPre();
+            int[][] post=this.graphe.getPost();
+            for (Marquage mar: listEtatsAccessible)
+            {
+                this.listNoEncoursTrite.push(mar);
+                while (!listNoEncoursTrite.isEmpty()) {
+                    Marquage M =listNoEncoursTrite.pop();
+                    int [] encoursMarquageValeur=M.getM();
+                    for(int t=1;t<=pre[0].length;t++){
+                        if(estTirable(M, pre, t-1)){
+
+                            int[] nouveauMarquageValeur = new int[M.getM().length];
+                            nouveauMarquageValeur=calculerNouveauMarquageValeur(M, pre, post, t-1);
+                            Marquage nouveauMarquage=new Marquage(nouveauMarquageValeur);
+                            if(!containsArray(mar.getMarquagesSuivants(),nouveauMarquage))
+                            {
+                                mar.addMarquageSuivant(nouveauMarquage);
+                                this.listNoEncoursTrite.push(nouveauMarquage);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
+    }
+    public boolean testerReinitialisable()
+    {
+        creationListMarquageSuivants();
+        if (this.borne == false)
+        {
+            return false;
+        }
+        for (Marquage m : listEtatsAccessible)
+        {
+            System.out.print(Arrays.toString(m.getM())+"------->");
+            m.afficherListMarquagesSuivants(this.graphe.getM0());
+            System.out.println("");
+            if(!m.existDansMarquageSuivant(graphe.getM0()))
+            {
+                System.out.println("M0 nexiste pas dans cette sequence alors le graphe n'est pas reinitialisable");
+                return false;
+            }
+
+        }
+
+
+        System.out.println("M0 existe dans toutes les sequences alors le graphe est reinitialisable");
+        return true;
+
+
+    }
 
     public void construireGraphe()
     { 
@@ -55,34 +129,37 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
         while (!listNoEncoursTrite.isEmpty()) {
              Marquage M =listNoEncoursTrite.pop();
              int [] encoursMarquageValeur=M.getM();
-
+                System.out.println(listNoEncoursTrite.elements());
              for(int t=1;t<=pre[0].length;t++){
                 if(estTirable(M, pre, t-1)){
 
                     int[] nouveauMarquageValeur = new int[M.getM().length];
                     nouveauMarquageValeur=calculerNouveauMarquageValeur(M, pre, post, t-1);
                     Marquage nouveauMarquage=new Marquage(nouveauMarquageValeur);
-                    nouveauMarquage.addMarquagePrecedent(M);
-                    for(Marquage m :M.getMarquagesPrecedents())
+                    if(!containsArray(listEtatsAccessible,nouveauMarquage))
                     {
-                        nouveauMarquage.addMarquagePrecedent(m);
-                    }
-                    if(nouveauMarquage.superieurOuEgalAuxPrecedents())
-                    {
-                            System.out.println("le graphe n'est pas borne");
-                        return;
-                    }
-                    this.Resultat.add(new AffichageStochastique(encoursMarquageValeur, t, nouveauMarquageValeur, this.graphe.getPoids().get(t-1)));
-                    if(containsArray(listEtatsAccessible,nouveauMarquage)==false)
-                    {
+                        nouveauMarquage.addMarquagePrecedent(M);
                         this.listEtatsAccessible.add(nouveauMarquage);
                         this.listNoEncoursTrite.push(nouveauMarquage);
+                        for(Marquage m :M.getMarquagesPrecedents())
+                        {
+                            nouveauMarquage.addMarquagePrecedent(m);
+                        }
+                        if(nouveauMarquage.superieurOuEgalAuxPrecedents())
+                        {
+                            this.borne=false;
+                            return;
+                        }
                     }
+
+
+                    this.Resultat.add(new AffichageStochastique(encoursMarquageValeur, t, nouveauMarquageValeur, this.graphe.getPoids().get(t-1)));
                 }
 
              }
             
         }
+        this.borne=true;
     }
 
 
@@ -123,7 +200,7 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
             for (AffichageStochastique a : Resultat) {
                 int[] source = a.getEncoursMarquageValeur();
                 int[] target = a.getNouveauMarquageValeur();
-                int t = a.getTransition();
+                String t = a.getTransition() + " " +a.getPoids();
     
                 String srcName = "M" + Arrays.toString(source).replaceAll("[\\[\\] ,]", "_");
                 String tgtName = "M" + Arrays.toString(target).replaceAll("[\\[\\] ,]", "_");

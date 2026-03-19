@@ -1,4 +1,2 @@
-petriGraphe\Affichage.class
-petriGraphe\App.class
-petriGraphe\Graphe.class
-petriGraphe\GrapheMarquage.class
+petriGraphe\AbstractClasses\AbstractAffichage.class
+petriGraphe\AbstractClasses\AbstractGraphe.class

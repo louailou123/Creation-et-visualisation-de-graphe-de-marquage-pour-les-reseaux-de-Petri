@@ -3,7 +3,9 @@ package petriGraphe;
 import java.util.Scanner;
 import java.util.Vector;
 
+import petriGraphe.Graphes.Graphe;
 import petriGraphe.Graphes.GrapheStochastique;
+import petriGraphe.Marquages.GrapheMarquage;
 import petriGraphe.Marquages.GrapheMarquageStochastique;
 import petriGraphe.Marquages.Marquage;
 
@@ -93,44 +95,72 @@ public class App {
                 }
             }
         }
-        System.out.print("Nombre des poids du réseau : ");
-        int poidsCount;
-        while (true) {
-            try {
-                poidsCount = Integer.parseInt(scanner.nextLine().trim());
-                if (poidsCount > 0) break;
-                System.out.print("Veuillez saisir un entier strictement positif : ");
-            } catch (NumberFormatException e) {
-                System.out.print("Entrée invalide: ");
-            }
-        }
-        System.out.println("Entrez le vecteur des poids(" + poidsCount + " valeurs) :");
-        Vector<Float> poids = new Vector<>(poidsCount);
-        while (true) {
-            try {
 
-                for (int i = 0; i < poidsCount; i++) {
-                    System.out.print("poids[" + i + "] = ");
-                    float value = Float.parseFloat(scanner.nextLine().trim());
-                    if (value >= 0) {
-                        poids.add(value);
-                    } else {
-                        System.out.print("Veuillez saisir un nombre >= 0 : ");
-                        i--; 
-                    }
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.print("Entrée invalide. Saisissez un nombre reel valide : ");
-            }
-            
-        }
         Marquage M0Obj = new Marquage(M0);
 
-        GrapheStochastique gs = new GrapheStochastique(Pre, Post, M0Obj,poids);
-        GrapheMarquageStochastique gms = new GrapheMarquageStochastique(gs);
-        gms.construireGraphe();
-        gms.afficherlaliste();
-        gms.affichergraphe();
+        System.out.print("Le graphe est-il stochastique ? (oui/non) : ");
+        boolean isStochastic = false;
+        while (true) {
+            String response = scanner.nextLine().trim().toLowerCase();
+            if (response.equals("oui") || response.equals("o")) {
+                isStochastic = true;
+                break;
+            } else if (response.equals("non") || response.equals("n")) {
+                break;
+            } else {
+                System.out.print("Réponse invalide. Veuillez saisir 'oui' ou 'non' : ");
+            }
+        }
+
+        if (isStochastic) {
+            Vector<Float> poids = new Vector<>();
+            System.out.print("Nombre des poids du réseau : ");
+            int poidsCount;
+            while (true) {
+                try {
+                    poidsCount = Integer.parseInt(scanner.nextLine().trim());
+                    if (poidsCount > 0) break;
+                    System.out.print("Veuillez saisir un entier strictement positif : ");
+                } catch (NumberFormatException e) {
+                    System.out.print("Entrée invalide: ");
+                }
+            }
+
+            System.out.println("Entrez le vecteur des poids (" + poidsCount + " valeurs) :");
+            for (int i = 0; i < poidsCount; i++) {
+                while (true) {
+                    try {
+                        System.out.print("poids[" + i + "] = ");
+                        float value = Float.parseFloat(scanner.nextLine().trim());
+                        if (value >= 0) {
+                            poids.add(value);
+                            break;
+                        } else {
+                            System.out.print("Veuillez saisir un nombre >= 0 : ");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.print("Entrée invalide. Saisissez un nombre réel valide : ");
+                    }
+                }
+            }
+            GrapheStochastique gs = new GrapheStochastique(Pre, Post, M0Obj,poids);
+            GrapheMarquageStochastique gms = new GrapheMarquageStochastique(gs);
+            gms.construireGraphe();
+            gms.afficherlaliste();
+            gms.affichergraphe();
+            gms.testerBornitude();
+            gms.exporterGrapheHierarchique("graphe");
+
+        } else {
+            Graphe g = new Graphe(Pre,Post,M0Obj);
+            GrapheMarquage gm = new GrapheMarquage(g);
+            gm.testerReinitialisable();
+        }
+
+
+
+
+
+
     }
 }

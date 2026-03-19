@@ -9,9 +9,11 @@ public abstract class AbstractGraphe {
     protected  int[][] Pre;
     protected  int[][] Post;
     protected  Marquage M0;
+    protected boolean estConstruit=false;
     public AbstractGraphe(int[][] Pre, int[][] Post, Marquage M0) {
     this.Pre = Pre;
     this.Post = Post;
     this.M0 = M0;
 }
+
 }
