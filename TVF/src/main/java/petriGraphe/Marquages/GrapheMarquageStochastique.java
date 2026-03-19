@@ -94,12 +94,17 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
                 }
             }
         }
+        else
+        {
+            return;
+        }
     }
     public boolean testerReinitialisable()
     {
         creationListMarquageSuivants();
         if (this.borne == false)
         {
+            System.out.println("le graphe n'est pas borné alors le graphe n'est pas reinitialisable");
             return false;
         }
         for (Marquage m : listEtatsAccessible)
@@ -109,7 +114,7 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
             System.out.println("");
             if(!m.existDansMarquageSuivant(graphe.getM0()))
             {
-                System.out.println("M0 nexiste pas dans cette sequence alors le graphe n'est pas reinitialisable");
+                System.out.println("M0 n'existe pas dans cette sequence alors le graphe n'est pas reinitialisable");
                 return false;
             }
 
@@ -121,6 +126,8 @@ public class GrapheMarquageStochastique extends AbstractGrapheMarquage {
 
 
     }
+
+
 
     public void construireGraphe()
     { 
